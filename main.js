@@ -1,8 +1,9 @@
+//View
 class CreateCharacter {
     constructor() {
-        this.charArray = [];
         this.submitCharacter = this.submitCharacter.bind(this);
         $('.submitCharacter').on('click', this.submitCharacter);
+        this.model = new Roster;
     };
     submitCharacter() {
         const charName = $('.name').val();
@@ -12,18 +13,29 @@ class CreateCharacter {
             return;
         } else {
             const newChar = new Character(charName, charClass);
-            this.charArray.push(newChar);
+            this.model.pushNewCharacter(newChar);
             console.log("New Character Created");
         }
     }
 }
 
+//Model
+class Roster { 
+    constructor() {
+        this.charArray = [];
+    };
+    pushNewCharacter(character) {
+        this.charArray.push(character);
+    };
+};
+
+//Controller(?)
 class Character {
     constructor(charName, charClass) {
         this.name = charName;
         this.class = charClass;
-        this.createStats();
-        this.createItems();
+        this.stats = this.createStats();
+        this.items = this.createItems();
     };
     createStats() {
         console.log(this.name);
