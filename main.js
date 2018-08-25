@@ -4,6 +4,7 @@ class CreateCharacter {
         this.submitCharacter = this.submitCharacter.bind(this);
         $('.submitCharacter').on('click', this.submitCharacter);
         this.model = new Roster();
+        this.render = new Render();
     };
     submitCharacter() {
         const charName = $('.name').val();
@@ -14,6 +15,7 @@ class CreateCharacter {
         } else {
             const newChar = new Character(charName, charClass);
             this.model.pushNewCharacter(newChar);
+            this.render.renderOnDOM(newChar);
             console.log(this.model.charArray);
         }
     }
@@ -26,6 +28,93 @@ class Roster {
     };
     pushNewCharacter(character) {
         this.charArray.push(character);
+    };
+};
+
+class Render {
+    renderOnDOM(character) {
+        const charContainer = $("<div>", {
+            class: 'charContiner d-block'
+        });
+        const columnOne = $("<div>", {
+            class: 'columnOne d-inline-block'
+        });
+        const nameText = $("<p>", {
+            text: "Name: " + character.name
+        });
+        const classText = $("<p>", {
+            text: "Class: " + character.class
+        });
+        const statsContainer = $("<div>", {
+            class: 'stats'
+        });
+        const statsHeader = $("<p>", {
+            text: "Stats"
+        });
+        const statsList = $("<ul>");
+        const strength = $("<li>", {
+            text: "Strength: " + character.stats.str
+        });
+        const dexterity = $("<li>", {
+            text: "Dexterity: " + character.stats.dex
+        });
+        const intelligence = $("<li>", {
+            text: "Intelligence: " + character.stats.int
+        });
+        const charisma = $("<li>", {
+            text: "Charisma: " + character.stats.cha
+        });
+        const constitution = $("<li>", {
+            text: "Constitution: " + character.stats.con
+        });
+        const willpower = $("<li>", {
+            text: "Willpower: " + character.stats.wpr
+        });
+        const columnTwo = $("<div>", {
+            class: 'columnTwo d-inline-block'
+        });
+        const itemsContainer = $("<div>", {
+            class: 'items'
+        });
+        const itemHeader = $("<p>", {
+            text: "Items"
+        });
+        const itemsList = $("<ul>");
+        const helmet = $("<li>", {
+            text: "Helmet: " + character.items.head
+        });
+        const chest = $("<li>", {
+            text: "Chest: " + character.items.chest
+        });
+        const hand = $("<li>", {
+            text: "Hand: " + character.items.hand
+        });
+        const leg = $("<li>", {
+            text: "Leg: " + character.items.leg
+        });
+        const necklace = $("<li>", {
+            text: "Necklace: " + character.items.necklace
+        });
+        const ringOne = $("<li>", {
+            text: "Ring 1: " + character.items.ringOne
+        });
+        const ringTwo = $("<li>", {
+            text: "Ring 2: " + character.items.ringTwo
+        });
+        const weapon = $("<li>", {
+            text: "Weapon: " + character.items.weapon
+        });
+        const shield = $("<li>", {
+            text: "Shield: " + character.items.shield
+        });
+        $(itemsList).append(helmet,chest,hand,leg,necklace,ringOne,ringTwo,weapon,shield);
+        $(itemsContainer).append(itemHeader, itemsList);
+        $(columnTwo).append(itemsContainer);
+        $(statsList).append(strength, dexterity, intelligence, charisma, constitution, willpower);
+        $(statsContainer).append(statsHeader,statsList);
+        $(columnOne).append(nameText, classText, statsContainer);
+        $(charContainer).append(columnOne, columnTwo);
+        $(".charactersContainer").append(charContainer);
     };
 };
 
