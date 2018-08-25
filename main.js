@@ -34,7 +34,8 @@ class Roster {
 class Render {
     renderOnDOM(character) {
         const charContainer = $("<div>", {
-            class: 'charContiner d-block'
+            class: 'charContiner col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 d-inline-block',
+            style: "border: 1px solid black; border-radius:5px; padding:10px; margin: 5px 10px"
         });
         const columnOne = $("<div>", {
             class: 'columnOne d-inline-block'
@@ -71,7 +72,7 @@ class Render {
             text: "Willpower: " + character.stats.wpr
         });
         const columnTwo = $("<div>", {
-            class: 'columnTwo d-inline-block'
+            class: 'columnTwo d-inline-block float-right'
         });
         const itemsContainer = $("<div>", {
             class: 'items'
@@ -123,15 +124,24 @@ class Character {
     constructor(charName, charClass) {
         this.name = charName;
         this.class = charClass;
-        this.stats = this.createStats();
+        this.stats = new Stats(this.class);
         this.items = new Items(this.class);
     };
-    createStats() {
+    talk() {
+        console.log("Hi my name is " + this.name + " and my class is ", + this.class);
+    }
+}
+
+class Stats {
+    constructor(className) {
+        return this.getStats(className);
+    };
+    getStats(className) {
         let statsObj = { str: 0, dex: 0, int: 0, cha: 0, con: 0, wpr: 0 };
         for (const key of Object.keys(statsObj)) {
             let lowNum = 3;
             let highNum = 18;
-            if (this.class === "Rogue") {
+            if (className === "Rogue") {
                 if ((key === "dex") || (key === "cha")) {
                     lowNum++;
                     highNum += 6;
@@ -139,7 +149,7 @@ class Character {
                     lowNum--;
                     highNum -= 6;
                 };
-            } else if (this.class === "Wizard") {
+            } else if (className === "Wizard") {
                 if ((key === "int") || (key === "wpr")) {
                     lowNum++;
                     highNum += 6;
@@ -152,7 +162,7 @@ class Character {
             statsObj[key] = randomStat;
         };
         return statsObj;
-    }
+    };
 }
 
 class Items {
