@@ -68,40 +68,26 @@ class Character {
 
 class Items {
     constructor(className) {
-        this.items = this.getClass(className);
+        return this.getClass(className);
     }
     getClass(className) {
-        let classItems = {};
         switch (className) {
             case "Knight":
-                classItems = this.getKnightItems();
-                break;
+                return new KnightItems();
             case "Rogue":
-                classItems = this.getRogueItems();
-                break;
+                return new RogueItems();
             case "Wizard":
-                classItems = this.getWizardItems();
-                break;
+                return new WizardItems();
         }
-        return classItems;
-    };
-    getKnightItems() {
-        return new KnightItems();
     }
-    getRogueItems() {
-        console.log('rge');
-    }
-    getWizardItems() {
-        console.log('wiz');
-    }
-}
+};
 
 class KnightItems {
     constructor() {
-        this.items = this.createItems();
+        return this.createItems();
     }
     createItems() {
-        let selectedItems = {head:"", chest:"", hand:"", leg:"", necklace: "", ringOne:"", ringTwo:"", weapon:"", shield:""};
+        let selectedItems = { head: "", chest: "", hand: "", leg: "", necklace: "", ringOne: "", ringTwo: "", weapon: "", shield: "" };
         const itemList = {
             head: ["Scout Knight Hat", "Solider Knight Helmet", "Templar Knight Helmet"],
             chest: ["Leather Knight Armor", "Standard Knight Armor", "Iron Knight Armor"],
@@ -115,7 +101,67 @@ class KnightItems {
         };
         for (const key of Object.keys(selectedItems)) {
             for (const itemKey of Object.keys(itemList)) {
-                if (key===itemKey) {
+                if (key === itemKey) {
+                    const numOfTypeItems = itemList[itemKey].length;
+                    const randomItemNum = Math.floor((Math.random() * numOfTypeItems));
+                    selectedItems[key] = itemList[itemKey][randomItemNum];
+                }
+            }
+        }
+        return selectedItems;
+    }
+}
+
+class RogueItems {
+    constructor() {
+        return this.createItems();
+    }
+    createItems() {
+        let selectedItems = { head: "", chest: "", hand: "", leg: "", necklace: "", ringOne: "", ringTwo: "", weapon: "", shield: "" };
+        const itemList = {
+            head: ["Scout Knight Hat", "Solider Knight Helmet", "Templar Knight Helmet"],
+            chest: ["Leather Knight Armor", "Standard Knight Armor", "Iron Knight Armor"],
+            hand: ["Leather Knight Gloves", "Standard Knight Gloves", "Ironclad Knight Gloves"],
+            leg: ["Leather Knight Leggings", "Standard Knight Boots", "Iron Knight Greaves"],
+            necklace: ["Cross Necklace", "Iron Necklace"],
+            ringOne: ["Iron Ring", "Cross Ring"],
+            ringTwo: ["Iron Ring", "Cross Ring"],
+            weapon: ["Shortsword", "Broadsword", "War Hammer"],
+            shield: ["Round Shield", "Standard Shield", "Tower Shield"]
+        };
+        for (const key of Object.keys(selectedItems)) {
+            for (const itemKey of Object.keys(itemList)) {
+                if (key === itemKey) {
+                    const numOfTypeItems = itemList[itemKey].length;
+                    const randomItemNum = Math.floor((Math.random() * numOfTypeItems));
+                    selectedItems[key] = itemList[itemKey][randomItemNum];
+                }
+            }
+        }
+        return selectedItems;
+    }
+}
+
+class WizardItems {
+    constructor() {
+        return this.createItems();
+    }
+    createItems() {
+        let selectedItems = { head: "", chest: "", hand: "", leg: "", necklace: "", ringOne: "", ringTwo: "", weapon: "", shield: "" };
+        const itemList = {
+            head: ["Scout Knight Hat", "Solider Knight Helmet", "Templar Knight Helmet"],
+            chest: ["Leather Knight Armor", "Standard Knight Armor", "Iron Knight Armor"],
+            hand: ["Leather Knight Gloves", "Standard Knight Gloves", "Ironclad Knight Gloves"],
+            leg: ["Leather Knight Leggings", "Standard Knight Boots", "Iron Knight Greaves"],
+            necklace: ["Cross Necklace", "Iron Necklace"],
+            ringOne: ["Iron Ring", "Cross Ring"],
+            ringTwo: ["Iron Ring", "Cross Ring"],
+            weapon: ["Shortsword", "Broadsword", "War Hammer"],
+            shield: ["Round Shield", "Standard Shield", "Tower Shield"]
+        };
+        for (const key of Object.keys(selectedItems)) {
+            for (const itemKey of Object.keys(itemList)) {
+                if (key === itemKey) {
                     const numOfTypeItems = itemList[itemKey].length;
                     const randomItemNum = Math.floor((Math.random() * numOfTypeItems));
                     selectedItems[key] = itemList[itemKey][randomItemNum];
