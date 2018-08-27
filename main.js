@@ -1,3 +1,5 @@
+"use strict";
+
 //View
 class CreateCharacter {
     constructor() {
@@ -21,6 +23,21 @@ class CreateCharacter {
     }
 }
 
+class Character {
+    constructor(charName, charClass) {
+        this.name = charName;
+        this.class = charClass;
+        this.stats = new Stats(this.class);
+        this.items = new Items(this.class);
+    };
+    talk() {
+        const talkMsg = "Hi, my name is " + this.name + " and my class is " + this.class + "."
+        $('.talkModalTitle').text(this.name + " speaks!");
+        $('.talkMsg').text(talkMsg);
+        $('.talkModal').modal();
+    }
+}
+
 //Model
 class Roster {
     constructor() {
@@ -31,6 +48,7 @@ class Roster {
     };
 };
 
+//Controller(?)
 class Render {
     renderOnDOM(character) {
         const charContainer = $("<div>", {
@@ -108,29 +126,23 @@ class Render {
         const shield = $("<li>", {
             text: "Shield: " + character.items.shield
         });
+        const talkBtn = $("<button>", {
+            text: "Talk",
+            class: "btn btn-primary talkBtn",
+            on: {
+                click: character.talk.bind(character)
+            }
+        });
         $(itemsList).append(helmet,chest,hand,leg,necklace,ringOne,ringTwo,weapon,shield);
         $(itemsContainer).append(itemHeader, itemsList);
         $(columnTwo).append(itemsContainer);
         $(statsList).append(strength, dexterity, intelligence, charisma, constitution, willpower);
         $(statsContainer).append(statsHeader,statsList);
-        $(columnOne).append(nameText, classText, statsContainer);
+        $(columnOne).append(nameText, classText, statsContainer, talkBtn);
         $(charContainer).append(columnOne, columnTwo);
         $(".charactersContainer").append(charContainer);
     };
 };
-
-//Controller(?)
-class Character {
-    constructor(charName, charClass) {
-        this.name = charName;
-        this.class = charClass;
-        this.stats = new Stats(this.class);
-        this.items = new Items(this.class);
-    };
-    talk() {
-        console.log("Hi my name is " + this.name + " and my class is ", + this.class);
-    }
-}
 
 class Stats {
     constructor(className) {
