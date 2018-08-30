@@ -12,9 +12,10 @@ class CreateCharacter {
         const charName = $('.name').val();
         const charClass = $('#className').val();
         if (charName === "" || charClass === null) {
-            console.log('whoop');
+            $('.name').addClass('is-invalid');
             return;
         } else {
+            $('.name').removeClass('is-invalid');
             const newChar = new Character(charName, charClass);
             this.model.pushNewCharacter(newChar);
             this.render.renderOnDOM(newChar);
@@ -36,7 +37,17 @@ class Character {
         $('.talkMsg').text(talkMsg);
         $('.talkModal').modal();
     }
-}
+    reroll(rerollType) {
+        if (rerollType === "stats") {
+            this.stats = new Stats(this.class);
+        } else if (rerollType === "items") {
+            this.items = new Items(this.class);
+        } else if (rerollType === "both") {
+            this.stats = new Stats(this.class);
+            this.items = new Items(this.class);
+        };
+    };
+};
 
 //Model
 class Roster {
@@ -49,10 +60,11 @@ class Roster {
 };
 
 //Controller(?)
+//Use JSX or premake HTML element to add to DOM or clone
 class Render {
     renderOnDOM(character) {
         const charContainer = $("<div>", {
-            class: 'charContiner col-xl-3 col-lg-3 col-md-12 col-sm-12 col-12 d-inline-block',
+            class: 'charContiner col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 d-inline-block',
             style: "border: 1px solid black; border-radius:5px; padding:10px; margin: 5px 10px"
         });
         const columnOne = $("<div>", {
@@ -133,12 +145,52 @@ class Render {
                 click: character.talk.bind(character)
             }
         });
+        const rerollDropDown = $("<div>", {
+            class: "dropdown rerollDropDown",
+        });
+        const rerollBtn = $("<button>", {
+            text: "Reroll",
+            class: "btn btn-info dropdown-toggle rerollBtn",
+            type: "button",
+            "data-toggle": "dropdown",
+            "aria-haspopup": "true",
+            "aria-expanded": "false"
+        });
+        const rerollMenu = $("<div>", {
+            class: "dropdown-menu"
+        });
+        const rerollStatsBtn = $("<button>", {
+            text: "Reroll Stats",
+            class: "dropdown-item",
+            type: "button",
+            on: {
+                click: character.reroll.bind(character, 'stats')
+            }
+        });
+        const rerollItemsBtn = $("<button>", {
+            text: "Reroll Items",
+            class: "dropdown-item",
+            type: "button",
+            on: {
+                click: character.reroll.bind(character, 'items')
+            }
+        });
+        const rerollBothBtn = $("<button>", {
+            text: "Reroll Both",
+            class: "dropdown-item",
+            type: "button",
+            on: {
+                click: character.reroll.bind(character, 'both')
+            }
+        });
+        $(rerollMenu).append(rerollStatsBtn,rerollItemsBtn,rerollBothBtn);
+        $(rerollDropDown).append(rerollBtn, rerollMenu);
         $(itemsList).append(helmet,chest,hand,leg,necklace,ringOne,ringTwo,weapon,shield);
         $(itemsContainer).append(itemHeader, itemsList);
-        $(columnTwo).append(itemsContainer);
+        $(columnTwo).append(itemsContainer, talkBtn, rerollDropDown);
         $(statsList).append(strength, dexterity, intelligence, charisma, constitution, willpower);
         $(statsContainer).append(statsHeader,statsList);
-        $(columnOne).append(nameText, classText, statsContainer, talkBtn);
+        $(columnOne).append(nameText, classText, statsContainer);
         $(charContainer).append(columnOne, columnTwo);
         $(".charactersContainer").append(charContainer);
     };
